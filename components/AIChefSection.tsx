@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { chatWithHeritageExpert } from '../services/geminiService';
 import { STATIC_RECIPES } from '../constants';
 import { Recipe } from '../types';
 
@@ -12,20 +11,29 @@ const AIChefSection: React.FC = () => {
 
   const selectRecipe = (type: string) => {
     setLoading(true);
-    // Προσομοίωση μικρής καθυστέρησης για "εφέ"
     setTimeout(() => {
       setRecipe(STATIC_RECIPES[type] || null);
       setLoading(false);
     }, 400);
   };
 
-  const askExpert = async () => {
+  const askExpert = () => {
     if (!userInput.trim()) return;
     setLoading(true);
-    const result = await chatWithHeritageExpert(userInput);
-    setHeritageMsg(result || "Ο ειδικός βρίσκεται στα χωράφια αυτή τη στιγμή. Παρακαλώ δοκιμάστε αργότερα.");
-    setLoading(false);
-    setUserInput('');
+    
+    // Στατική απάντηση αντί για API κλήση
+    setTimeout(() => {
+        const responses = [
+            "Η λίμνη Ορεστιάδα προσφέρει την απαραίτητη υγρασία που κάνει τους γίγαντες μας τόσο βουτυρένιους.",
+            "Η παράδοση μας ξεκινά από το 1922 και συνεχίζεται με το ίδιο μεράκι από γενιά σε γενιά.",
+            "Το χώμα της περιοχής μας είναι πλούσιο σε θρεπτικά συστατικά, δίνοντας στα όσπρια τη μοναδική τους γεύση.",
+            "Στην Καστοριά, το μυστικό της καλής φασολάδας είναι το αργό μαγείρεμα και το εκλεκτό ελαιόλαδο."
+        ];
+        const randomResp = responses[Math.floor(Math.random() * responses.length)];
+        setHeritageMsg(`Ο ειδικός λέει: "${randomResp}"`);
+        setLoading(false);
+        setUserInput('');
+    }, 600);
   };
 
   return (
@@ -103,7 +111,7 @@ const AIChefSection: React.FC = () => {
             )}
           </div>
 
-          {/* Right: Heritage Chat (Still AI) */}
+          {/* Right: Heritage Chat (Static Mock) */}
           <div className="space-y-8 reveal">
              <div className="bg-kastoria-blue text-white p-10">
                 <h3 className="text-3xl font-bold mb-4 serif">Ειδικός Παράδοσης</h3>
@@ -133,7 +141,6 @@ const AIChefSection: React.FC = () => {
                   />
                   <button 
                     onClick={askExpert}
-                    disabled={loading}
                     className="bg-white text-kastoria-blue px-6 py-3 font-bold uppercase tracking-wider text-xs hover:bg-blue-50 transition-colors"
                   >
                     Στειλε

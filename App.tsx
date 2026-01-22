@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Product, CartItem } from './types';
-import { PRODUCTS, HERO_IMAGE_PROMPT } from './constants';
-import { generateHeroImage } from './services/geminiService';
+import { PRODUCTS } from './constants';
 import Navbar from './components/Navbar';
 import ProductCard from './components/ProductCard';
 import AIChefSection from './components/AIChefSection';
@@ -10,17 +9,9 @@ import AIChefSection from './components/AIChefSection';
 const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [heroImage, setHeroImage] = useState<string | null>(null);
-  const [isHeroLoading, setIsHeroLoading] = useState(true);
-
-  useEffect(() => {
-    const loadHero = async () => {
-      const img = await generateHeroImage(HERO_IMAGE_PROMPT);
-      setHeroImage(img);
-      setIsHeroLoading(false);
-    };
-    loadHero();
-  }, []);
+  
+  // Χρησιμοποιούμε μια στατική εικόνα υψηλής ποιότητας που ταιριάζει στο ύφος "Kastoria Legacy"
+  const heroImage = "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&q=80&w=1920";
 
   // Scroll Reveal Logic
   useEffect(() => {
@@ -40,7 +31,7 @@ const App: React.FC = () => {
     elements.forEach(el => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [isHeroLoading, PRODUCTS]);
+  }, [PRODUCTS]);
 
   const addToCart = (product: Product) => {
     setCart(prev => {
@@ -69,24 +60,11 @@ const App: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {isHeroLoading ? (
-          <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-            <div className="text-center">
-                <div className="w-16 h-16 border-4 border-kastoria-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-kastoria-blue font-medium animate-pulse">Απαθανατίζοντας το πρωινό φως της Καστοριάς...</p>
-            </div>
-          </div>
-        ) : heroImage ? (
-          <img 
-            src={heroImage} 
-            className="absolute inset-0 w-full h-full object-cover animate-fadeIn" 
-            alt="Kastoria Hero" 
-          />
-        ) : (
-          <div className="absolute inset-0 bg-kastoria-blue flex items-center justify-center">
-             <img src="https://images.unsplash.com/photo-1549113645-037389a056a0?auto=format&fit=crop&q=80&w=1920" className="absolute inset-0 w-full h-full object-cover opacity-50" />
-          </div>
-        )}
+        <img 
+          src={heroImage} 
+          className="absolute inset-0 w-full h-full object-cover animate-fadeIn" 
+          alt="Kastoria Hero" 
+        />
         <div className="absolute inset-0 hero-gradient"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 pt-20">
