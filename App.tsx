@@ -10,10 +10,10 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   
-  // Χρησιμοποιούμε μια στατική εικόνα υψηλής ποιότητας που ταιριάζει στο ύφος "Kastoria Legacy"
-  const heroImage = "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&q=80&w=1920";
+  // Στατική εικόνα υψηλής ποιότητας που αποπνέει την ατμόσφαιρα της Καστοριάς
+  const heroImage = "https://images.unsplash.com/photo-1549113645-037389a056a0?auto=format&fit=crop&q=80&w=1920";
 
-  // Scroll Reveal Logic
+  // Scroll Reveal Logic - Διασφάλιση ότι τα στοιχεία θα εμφανιστούν ακόμα και αν ο Observer αργήσει
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1
@@ -30,8 +30,16 @@ const App: React.FC = () => {
     const elements = document.querySelectorAll('.reveal');
     elements.forEach(el => observer.observe(el));
 
-    return () => observer.disconnect();
-  }, [PRODUCTS]);
+    // Fallback: Αν μετά από 2 δευτερόλεπτα δεν έχουν εμφανιστεί, εμφάνισέ τα όλα
+    const timer = setTimeout(() => {
+        elements.forEach(el => el.classList.add('active'));
+    }, 2000);
+
+    return () => {
+        observer.disconnect();
+        clearTimeout(timer);
+    };
+  }, []);
 
   const addToCart = (product: Product) => {
     setCart(prev => {
@@ -81,9 +89,9 @@ const App: React.FC = () => {
                     <a href="#marketplace" className="bg-white text-kastoria-blue px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-kastoria-blue hover:text-white transition-all shadow-xl">
                         Αγοραστε Τωρα
                     </a>
-                    <button className="border border-white/40 bg-white/10 backdrop-blur-sm text-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white/20 transition-all">
+                    <a href="#heritage" className="border border-white/40 bg-white/10 backdrop-blur-sm text-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white/20 transition-all text-center">
                         Η Ιστορια Μας
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

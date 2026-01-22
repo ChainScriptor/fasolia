@@ -112,7 +112,7 @@ export const STATIC_RECIPES: Record<string, Recipe> = {
       'Σε ένα ταψί στρώνετε τα φασόλια μαζί με το ζουμί τους (να τα καλύπτει ελαφρώς).',
       'Προσθέτετε τη ντομάτα, το σκόρδο, το κρεμμύδι και το λάδι.',
       'Πασπαλίζετε με τα μυρωδικά.',
-      'Ψήνετε στους 180°C για περίπου 45 λεπτά μέχρι να μείνουν με το λάδι τους.'
+      'Ψήνετε στους 180°C for περίπου 45 λεπτά μέχρι να μείνουν με το λάδι τους.'
     ],
     prepTime: '1.5 ώρα',
     servings: 4
@@ -140,12 +140,3 @@ export const STATIC_RECIPES: Record<string, Recipe> = {
     servings: 6
   }
 };
-
-export const HERO_IMAGE_PROMPT = `
-Cinematic Marketplace Hero Banner - Authentic Greek Village Square Atmosphere. 
-Low-angle, wide-lens perspective looking into a traditional market stall. 
-Large burlap sacks filled with white giant beans positioned in the left-third, tilted toward the viewer. 
-The texture of the beans leads the eye from the foreground toward the distant mountains of Kastoria and the misty Orestiada lake. 
-Early morning blue hour transitioning to sunrise. 
-Rustic Luxury, soulful, nostalgic, premium, artisanal, 'Pure Greece'.
-`;
