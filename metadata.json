@@ -1,0 +1,7 @@
+{
+  "name": "The Kastoria Legacy",
+  "description": "A premium bulk marketplace for authentic Greek PGI beans, featuring a rustic luxury aesthetic and AI-powered culinary guidance.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
