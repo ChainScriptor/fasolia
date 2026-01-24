@@ -6,8 +6,6 @@ import { Recipe } from '../types';
 const AIChefSection: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [heritageMsg, setHeritageMsg] = useState('');
-  const [userInput, setUserInput] = useState('');
 
   const selectRecipe = (type: string) => {
     setLoading(true);
@@ -15,25 +13,6 @@ const AIChefSection: React.FC = () => {
       setRecipe(STATIC_RECIPES[type] || null);
       setLoading(false);
     }, 400);
-  };
-
-  const askExpert = () => {
-    if (!userInput.trim()) return;
-    setLoading(true);
-    
-    // Στατική απάντηση αντί για API κλήση
-    setTimeout(() => {
-        const responses = [
-            "Η λίμνη Ορεστιάδα προσφέρει την απαραίτητη υγρασία που κάνει τους γίγαντες μας τόσο βουτυρένιους.",
-            "Η παράδοση μας ξεκινά από το 1922 και συνεχίζεται με το ίδιο μεράκι από γενιά σε γενιά.",
-            "Το χώμα της περιοχής μας είναι πλούσιο σε θρεπτικά συστατικά, δίνοντας στα όσπρια τη μοναδική τους γεύση.",
-            "Στην Καστοριά, το μυστικό της καλής φασολάδας είναι το αργό μαγείρεμα και το εκλεκτό ελαιόλαδο."
-        ];
-        const randomResp = responses[Math.floor(Math.random() * responses.length)];
-        setHeritageMsg(`Ο ειδικός λέει: "${randomResp}"`);
-        setLoading(false);
-        setUserInput('');
-    }, 600);
   };
 
   return (
@@ -46,7 +25,7 @@ const AIChefSection: React.FC = () => {
             <span className="text-xs uppercase tracking-[0.3em] text-orange-600 font-bold mb-4 block">Οι Συνταγές μας</span>
             <h2 className="text-4xl font-bold text-kastoria-blue mb-6 serif">Παραδοσιακές Γεύσεις</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              Ανακαλύψτε τις αυθεντικές συνταγές για κάθε τύπο φασολιού Καστοριάς. Επιλέξτε την κατηγορία που σας ενδιαφέρει για να δείτε τον παραδοσιακό τρόπο μαγειρέματος.
+              Ανακαλύψτε τις αυθεντικές συνταγές για κάθε προϊόν μας. Επιλέξτε την κατηγορία που σας ενδιαφέρει για να δείτε τον παραδοσιακό τρόπο μαγειρέματος.
             </p>
             
             <div className="flex flex-wrap gap-3 mb-10">
@@ -111,52 +90,19 @@ const AIChefSection: React.FC = () => {
             )}
           </div>
 
-          {/* Right: Heritage Chat (Static Mock) */}
-          <div className="space-y-8 reveal">
-             <div className="bg-kastoria-blue text-white p-10">
-                <h3 className="text-3xl font-bold mb-4 serif">Ειδικός Παράδοσης</h3>
-                <p className="text-blue-100 mb-8 opacity-80 leading-relaxed">
-                  Ανακαλύψτε την ιστορία και το "μεράκι" των αγροτών μας στις όχθες της λίμνης Ορεστιάδας.
-                </p>
-                
-                <div className="mb-6 h-[300px] overflow-y-auto bg-white/5 p-4 rounded-lg space-y-4">
-                  {heritageMsg ? (
-                    <div className="text-sm leading-relaxed whitespace-pre-wrap italic">
-                       {heritageMsg}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-blue-200/50 italic flex items-center justify-center h-full text-center">
-                      Ρωτήστε για το χώμα, την παράδοση ή τη λίμνη...
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    placeholder="Πείτε μας τι θέλετε να μάθετε..."
-                    className="flex-grow bg-white/10 border border-white/20 px-4 py-3 text-sm focus:outline-none focus:border-white/50 transition-colors"
-                  />
-                  <button 
-                    onClick={askExpert}
-                    className="bg-white text-kastoria-blue px-6 py-3 font-bold uppercase tracking-wider text-xs hover:bg-blue-50 transition-colors"
-                  >
-                    Στειλε
-                  </button>
-                </div>
-             </div>
-             
-             <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1549113645-037389a056a0?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Kastoria Lake" />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white p-8">
-                  <div className="text-center">
-                    <p className="serif italic text-xl mb-2">"Τα πάντα σε ισορροπία με τη φύση."</p>
-                    <p className="text-[10px] uppercase tracking-widest opacity-60">Φιλοσοφία της Κληρονομιάς</p>
-                  </div>
-                </div>
-             </div>
+          {/* Right: Video Section */}
+          <div className="reveal">
+            <div className="bg-black rounded-lg overflow-hidden shadow-xl">
+              <video
+                src="/video1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto"
+                style={{ maxHeight: '600px' }}
+              />
+            </div>
           </div>
 
         </div>

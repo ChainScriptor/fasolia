@@ -9,11 +9,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onCartClick, cartCount }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -21,11 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ onCartClick, cartCount }) => {
 
   const navLinks = [
     { name: 'Αρχική', href: '#' },
-    { 
-      name: 'Προϊόντα', 
-      href: '#marketplace', 
-      dropdown: ['Μικρά', 'Μεσαία', 'Μεγάλα', 'Γίγαντες'] 
-    },
+    { name: 'Προϊόντα', href: '#marketplace' },
     { name: 'Η Παράδοση', href: '#heritage' },
     { name: 'Συνταγές', href: '#recipes' },
   ];
@@ -33,150 +28,147 @@ const Navbar: React.FC<NavbarProps> = ({ onCartClick, cartCount }) => {
   return (
     <>
       <nav 
-        className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'bg-white/95 backdrop-blur-md h-16 shadow-sm border-b border-linen' 
-            : 'bg-transparent h-24'
+            ? 'bg-white/80 backdrop-blur-lg h-16 shadow-sm border-b border-gray-200/50' 
+            : 'bg-transparent h-20'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 text-kastoria-blue"
-            onClick={() => setIsMobileMenuOpen(true)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full">
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden p-2 rounded-md hover:bg-gray-100/50 transition-colors"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
 
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" className={`serif font-bold tracking-tighter transition-all duration-500 ${isScrolled ? 'text-xl' : 'text-2xl'}`}>
-              <span className="text-kastoria-blue">Η ΚΛΗΡΟΝΟΜΙΑ</span>
-              <span className="text-orange-600 italic ml-1">της</span>
-              <span className="text-kastoria-blue block md:inline md:ml-1">ΚΑΣΤΟΡΙΑΣ</span>
-            </a>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-10">
-            {navLinks.map((link) => (
-              <div 
-                key={link.name} 
-                className="relative group py-2"
-                onMouseEnter={() => link.dropdown && setIsProductsOpen(true)}
-                onMouseLeave={() => link.dropdown && setIsProductsOpen(false)}
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <a 
+                href="#" 
+                className={`serif font-bold tracking-tight transition-all duration-300 ${
+                  isScrolled 
+                    ? 'text-lg' 
+                    : 'text-xl md:text-2xl'
+                }`}
               >
+                <span className="text-kastoria-blue">Η ΚΛΗΡΟΝΟΜΙΑ</span>
+                <span className="text-orange-600 italic ml-1">της</span>
+                <span className="text-kastoria-blue block md:inline md:ml-1">ΚΑΣΤΟΡΙΑΣ</span>
+              </a>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
                 <a 
+                  key={link.name}
                   href={link.href}
-                  className={`text-[11px] uppercase tracking-[0.2em] font-bold transition-colors hover:text-orange-600 flex items-center ${
-                    isScrolled ? 'text-gray-700' : 'text-kastoria-blue md:text-white'
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isScrolled 
+                      ? 'text-gray-700 hover:text-kastoria-blue' 
+                      : 'text-white/90 hover:text-white'
                   }`}
                 >
                   {link.name}
-                  {link.dropdown && (
-                    <svg className={`ml-1 w-3 h-3 transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  )}
                 </a>
-                
-                {/* Dropdown Menu */}
-                {link.dropdown && (
-                  <div className={`absolute left-0 mt-2 w-48 bg-white border border-linen shadow-xl transition-all duration-300 transform origin-top ${
-                    isProductsOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
-                  }`}>
-                    <div className="py-2">
-                      {link.dropdown.map((item) => (
-                        <a 
-                          key={item}
-                          href="#marketplace"
-                          className="block px-6 py-3 text-[10px] uppercase tracking-widest text-gray-600 hover:bg-linen hover:text-kastoria-blue transition-colors font-bold"
-                        >
-                          Φασόλια {item}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Underline effect */}
-                <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-orange-600 transition-all duration-300 group-hover:w-full"></div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Icons/Actions */}
-          <div className="flex items-center space-x-4 md:space-x-8">
-            <button 
-              onClick={onCartClick}
-              className={`relative p-2 transition-colors ${isScrolled ? 'text-gray-700' : 'text-kastoria-blue md:text-white'}`}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              {cartCount > 0 && (
-                <span className="absolute top-1 right-1 bg-orange-600 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full ring-2 ring-white">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-            
-            <button className="hidden lg:block bg-kastoria-blue text-white px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-all">
-              Εισοδος
-            </button>
+            {/* Icons/Actions */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <button 
+                onClick={onCartClick}
+                className={`relative p-2 rounded-md transition-all duration-200 hover:bg-gray-100/50 ${
+                  isScrolled ? 'text-gray-700' : 'text-white/90 hover:text-white'
+                }`}
+                aria-label="Shopping cart"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs font-semibold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1.5">
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                )}
+              </button>
+              
+              <button 
+                className={`hidden lg:flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  isScrolled
+                    ? 'bg-kastoria-blue text-white hover:bg-slate-800'
+                    : 'bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 border border-white/20'
+                }`}
+              >
+                Είσοδος
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Side Menu */}
-      <div className={`fixed inset-0 z-[70] transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
-        <div className={`absolute top-0 left-0 h-full w-[80%] max-w-sm bg-white shadow-2xl transition-transform duration-500 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="p-8 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-12">
-              <span className="serif font-bold text-kastoria-blue text-xl uppercase tracking-tighter">Μενού</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-400">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />
+      {/* Mobile Side Menu - Shadcn Style */}
+      <div 
+        className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+        }`}
+      >
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        
+        {/* Side Panel */}
+        <div 
+          className={`absolute top-0 left-0 h-full w-[85%] max-w-sm bg-white shadow-xl transition-transform duration-300 ${
+            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <span className="text-lg font-semibold text-gray-900">Μενού</span>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Close menu"
+              >
+                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             
-            <nav className="space-y-8">
+            {/* Navigation */}
+            <nav className="flex-1 overflow-y-auto p-6 space-y-1">
               {navLinks.map((link) => (
-                <div key={link.name}>
-                  <a 
-                    href={link.href}
-                    onClick={() => !link.dropdown && setIsMobileMenuOpen(false)}
-                    className="text-2xl font-bold text-kastoria-blue serif block"
-                  >
-                    {link.name}
-                  </a>
-                  {link.dropdown && (
-                    <div className="mt-4 ml-4 space-y-4 border-l border-linen pl-6">
-                      {link.dropdown.map(item => (
-                        <a 
-                          key={item} 
-                          href="#marketplace" 
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="block text-sm text-gray-500 uppercase tracking-widest font-medium"
-                        >
-                          {item}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <a 
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-3 text-base font-medium text-gray-900 hover:text-kastoria-blue transition-colors"
+                >
+                  {link.name}
+                </a>
               ))}
             </nav>
 
-            <div className="mt-auto pt-12 border-t border-linen">
-              <button className="w-full bg-kastoria-blue text-white py-4 font-bold uppercase tracking-widest text-xs">
-                Εισοδος μελους
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-200 space-y-4">
+              <button 
+                className="w-full bg-kastoria-blue text-white py-3 rounded-md text-sm font-medium hover:bg-slate-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Είσοδος Μελών
               </button>
-              <p className="mt-6 text-center text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+              <p className="text-center text-xs text-gray-500">
                 Καστοριά, Ελλάδα • 2024
               </p>
             </div>
