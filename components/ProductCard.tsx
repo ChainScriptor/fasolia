@@ -1,13 +1,30 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../types';
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (p: Product) => void;
+  onAddToCart: (p: Product, quantity: number) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    if (quantity > 0) {
+      onAddToCart(product, quantity);
+      setQuantity(1);
+    }
+  };
+
+  const incrementQuantity = () => {
+    setQuantity(prev => prev + 0.5);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity(prev => Math.max(0.5, prev - 0.5));
+  };
+
   return (
     <div className="group bg-white border border-linen hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col reveal">
       <div className="relative aspect-[4/5] overflow-hidden">
@@ -21,14 +38,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             Πιστοποιηση ΠΓΕ
           </div>
         )}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <button 
-                onClick={() => onAddToCart(product)}
-                className="bg-white text-kastoria-blue px-6 py-3 font-semibold uppercase tracking-wider text-sm hover:bg-kastoria-blue hover:text-white transition-colors"
-            >
-                Προσθηκη στο Καλαθι
-            </button>
-        </div>
       </div>
       
       <div className="p-6 flex-grow flex flex-col">
@@ -51,7 +60,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           {product.description}
         </p>
         
-        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-linen pt-4">
+        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-linen pt-4 mb-4">
             <div>
                 <span className="text-[9px] uppercase tracking-tighter text-gray-400 font-bold block">Υφη</span>
                 <span className="text-xs font-medium text-gray-700">{product.texture}</span>
@@ -60,6 +69,50 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                 <span className="text-[9px] uppercase tracking-tighter text-gray-400 font-bold block">Γευση</span>
                 <span className="text-xs font-medium text-gray-700">{product.flavorProfile}</span>
             </div>
+        </div>
+
+        {/* Quantity Selector and Add to Cart */}
+        <div className="border-t border-linen pt-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <label className="text-xs font-medium text-gray-700">Ποσότητα:</label>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={decrementQuantity}
+                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors text-gray-600 font-semibold"
+                type="button"
+              >
+                −
+              </button>
+              <input
+                type="number"
+                min="0.5"
+                step="0.5"
+                value={quantity}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  if (val >= 0.5) setQuantity(val);
+                }}
+                className="w-20 px-2 py-1.5 border border-gray-300 rounded text-center text-sm font-semibold focus:outline-none focus:border-kastoria-blue"
+              />
+              <button
+                onClick={incrementQuantity}
+                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors text-gray-600 font-semibold"
+                type="button"
+              >
+                +
+              </button>
+              <span className="text-xs text-gray-500 ml-1">κιλά</span>
+            </div>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="w-full bg-kastoria-blue text-white py-3 font-semibold uppercase tracking-wider text-sm hover:bg-slate-800 transition-colors"
+          >
+            Προσθήκη στο Καλάθι
+          </button>
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Σύνολο: €{(product.pricePerKg * quantity).toFixed(2)}
+          </p>
         </div>
       </div>
     </div>
