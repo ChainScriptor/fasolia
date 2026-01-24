@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "npm-9_x"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[phases.caddy]
+pkgs = ["caddy"]
+cmds = ["caddy fmt --overwrite /assets/Caddyfile"]
+
+[start]
+cmd = "exec caddy run --config /assets/Caddyfile --adapter caddyfile 2>&1"
